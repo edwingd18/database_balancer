@@ -20,7 +20,7 @@ fi
 
 echo "[INFO] Creando usuario de replicación..."
 mysql -uroot -padmin <<EOF
-ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'admin';
+ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'admin';
 FLUSH PRIVILEGES;
 
 EOF
@@ -29,19 +29,25 @@ mysql -uroot -padmin <<EOF
 ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'admin';
 FLUSH PRIVILEGES;
 
-DROP USER IF EXISTS 'admin'@'192.168.70.11';
-CREATE USER 'admin'@'192.168.70.11' IDENTIFIED WITH mysql_native_password BY 'admin';
-GRANT REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'admin'@'192.168.70.11';
+DROP USER IF EXISTS 'admin'@'192.168.70.%';
+CREATE USER 'admin'@'192.168.70.%' IDENTIFIED WITH mysql_native_password BY 'admin';
+GRANT REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'admin'@'192.168.70.%';
 FLUSH PRIVILEGES;
 EOF
 
 echo "[INFO] Habilitando acceso remoto para root desde el esclavo..."
 mysql -uroot -padmin <<EOF
-CREATE USER IF NOT EXISTS 'root'@'192.168.70.11' IDENTIFIED WITH mysql_native_password BY 'admin';
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'192.168.70.11' WITH GRANT OPTION;
+CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'admin';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+CREATE DATABASE IF NOT EXISTS sbtest;
+GRANT ALL PRIVILEGES ON sbtest.* TO 'admin'@'192.168.70.%';
 FLUSH PRIVILEGES;
 EOF
 
 
 
+
 echo "[✅] Maestro configurado correctamente."
+
+
