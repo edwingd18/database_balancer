@@ -19,11 +19,7 @@ else
 fi
 
 echo "[INFO] Creando usuario de replicación..."
-mysql -uroot -padmin <<EOF
-ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'admin';
-FLUSH PRIVILEGES;
 
-EOF
 echo "[INFO] Creando usuario de replicación..."
 mysql -uroot -padmin <<EOF
 ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'admin';
@@ -40,11 +36,15 @@ mysql -uroot -padmin <<EOF
 CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'admin';
 GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
-CREATE DATABASE IF NOT EXISTS sbtest;
+
 GRANT ALL PRIVILEGES ON sbtest.* TO 'admin'@'192.168.70.%';
 FLUSH PRIVILEGES;
 EOF
+mysql -uroot -padmin <<EOF
+ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'admin';
+FLUSH PRIVILEGES;
 
+EOF
 
 
 

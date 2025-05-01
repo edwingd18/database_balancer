@@ -68,6 +68,7 @@ FLUSH PRIVILEGES;
 EOF
 mysql -uroot -padmin -h 192.168.70.10 <<EOF
 CREATE DATABASE test;
+CREATE DATABASE sbtest;
 USE test;
 CREATE TABLE test (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(100));
 INSERT INTO test (name) VALUES ('dato1'), ('dato2');
@@ -75,3 +76,6 @@ EOF
 
 echo "[✅] Base de datos creada en el maestro. Debería replicarse en el esclavo.')"
 
+# mysql -uroot -padmin <<EOF
+# SET GLOBAL read_only = ON;
+# EOF

@@ -10,7 +10,7 @@ echo "[INFO] Preparando los datos para la prueba en el cliente..."
 
 sysbench /usr/share/sysbench/oltp_read_write.lua \
 --mysql-host=192.168.70.12 \
---mysql-port=3307 \
+--mysql-port=3308 \
 --mysql-user=root \
 --mysql-password=admin \
 --mysql-db=sbtest \
