@@ -124,4 +124,4 @@ vagrant destroy
 
 ---
 
-*Desarrollado con ❤️ para pruebas de rendimiento de bases de datos MySQL*
+*Desarrollado para pruebas de rendimiento de bases de datos MySQL❤️*
