@@ -1,4 +1,8 @@
 #!/bin/bash
+sudo systemctl stop systemd-resolved
+sudo systemctl disable systemd-resolved
+sudo rm -f /etc/resolv.conf
+echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null
 
 echo "[INFO] Instalando sysbench..."
 
