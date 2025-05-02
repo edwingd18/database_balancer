@@ -14,6 +14,6 @@ systemctl start nginx
 if systemctl is-active --quiet nginx; then
     echo "[✅] nginx está corriendo como balanceador de carga."
 else
-    echo "[ERROR] nginx no se pudo iniciar." >&2
+    echo "[❌] nginx no se pudo iniciar." >&2
     exit 1
 fi

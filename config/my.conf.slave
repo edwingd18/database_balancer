@@ -82,3 +82,4 @@ log_bin                 = /var/log/mysql/mysql-bin.log
 relay_log               = /var/log/mysql/mysql-relay-bin.log
 binlog_format           = row
 skip-networking = false
+read_only = ON

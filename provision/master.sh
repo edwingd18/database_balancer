@@ -12,42 +12,35 @@ cp /vagrant/config/my.conf.master /etc/mysql/mysql.conf.d/mysqld.cnf
 systemctl start mysql
 
 if systemctl is-active --quiet mysql; then
-    echo "[OK] MySQL está corriendo como maestro."
+    echo "[✅] MySQL está corriendo como maestro."
 else
-    echo "[ERROR] MySQL no se pudo iniciar." >&2
+    echo "[❌] MySQL no se pudo iniciar." >&2
     exit 1
 fi
-
-echo "[INFO] Creando usuario de replicación..."
 
 echo "[INFO] Creando usuario de replicación..."
 mysql -uroot -padmin <<EOF
 ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'admin';
 FLUSH PRIVILEGES;
 
-DROP USER IF EXISTS 'admin'@'192.168.70.%';
-CREATE USER 'admin'@'192.168.70.%' IDENTIFIED WITH mysql_native_password BY 'admin';
-GRANT REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'admin'@'192.168.70.%';
+CREATE USER 'admin'@'192.168.70.11' IDENTIFIED WITH mysql_native_password BY 'admin';
+GRANT REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'admin'@'192.168.70.11';
 FLUSH PRIVILEGES;
 EOF
 
-echo "[INFO] Habilitando acceso remoto para root desde el esclavo..."
+# Configuración de acceso remoto para root desde el balanceador y el esclavo
+echo "[INFO] Configurando acceso remoto restringido para root (solo desde el balanceador y el esclavo)..."
 mysql -uroot -padmin <<EOF
-CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'admin';
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+
+CREATE USER 'root'@'192.168.70.11' IDENTIFIED BY 'admin';
+CREATE USER 'root'@'192.168.70.12' IDENTIFIED BY 'admin';
+
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'192.168.70.12' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'192.168.70.11' WITH GRANT OPTION;  
+
+
 FLUSH PRIVILEGES;
 
-GRANT ALL PRIVILEGES ON sbtest.* TO 'admin'@'192.168.70.%';
-FLUSH PRIVILEGES;
 EOF
-mysql -uroot -padmin <<EOF
-ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'admin';
-FLUSH PRIVILEGES;
-
-EOF
-
-
 
 echo "[✅] Maestro configurado correctamente."
-
-
