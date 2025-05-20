@@ -24,9 +24,9 @@ El sistema está compuesto por:
 
 ### 1. Clonar el repositorio
 
-```bash
-git clone <URL_DEL_REPOSITORIO>
-cd <NOMBRE_DEL_REPOSITORIO>
+```bash[
+git clone https://github.com/edwingd18/database_balancer
+cd database_balancer
 ```
 
 ### 2. Requisitos Previos
