@@ -1,15 +1,39 @@
 # 💾 Sistema de Balanceo MySQL con Nginx
 
-## 📋 Descripción
-Este proyecto implementa un sistema de balanceo de carga para MySQL utilizando Nginx, configurado con máquinas virtuales a través de Vagrant.
+## 🏗️ Arquitectura del Sistema
 
-## 🛠️ Requisitos Previos
+<p align="center">
+  <img src="https://i.imgur.com/Ke4rUC8.png" alt="Imagen de la arquitectura">
+</p>
+
+El sistema está compuesto por:
+- Un balanceador Nginx configurado para enrutar operaciones de lectura y escritura a diferentes puertos y servidores MySQL.
+- Un clúster de MySQL con un nodo maestro (para escritura) y varios nodos esclavos (para lectura).
+- Un cliente que ejecuta pruebas de rendimiento y monitorea el sistema.
+- Todo el entorno se despliega automáticamente usando Vagrant y VirtualBox, facilitando la creación y destrucción de las máquinas virtuales necesarias para las pruebas.
+
+---
+
+## 📋 Descripción
+
+**Este proyecto implementa un _balanceador de carga_ para bases de datos MySQL usando Nginx.** El objetivo es separar las operaciones de **lectura** y **escritura**: las *escrituras* se dirigen al nodo maestro y las *lecturas* se distribuyen entre los nodos esclavos. Todo el entorno se despliega de forma _automática_ con **Vagrant** y **VirtualBox**, permitiendo pruebas de rendimiento y análisis de arquitecturas distribuidas de manera sencilla y reproducible.
+
+---
+
+## 🚀 Instalación y Puesta en Marcha
+
+### 1. Clonar el repositorio
+
+```bash
+git clone <URL_DEL_REPOSITORIO>
+cd <NOMBRE_DEL_REPOSITORIO>
+```
+
+### 2. Requisitos Previos
 - [Vagrant](https://www.vagrantup.com/downloads) instalado
 - [VirtualBox](https://www.virtualbox.org/wiki/Downloads) instalado
 
-## 🔧 Configuración inicial
-
-### Paso 1: Iniciar el entorno
+### 3. Iniciar el entorno
 Ejecuta en la raíz del proyecto:
 
 ```bash
@@ -18,9 +42,11 @@ vagrant up
 
 > ⏱️ *Por favor, espera a que todas las máquinas virtuales se inicien correctamente. Esto puede tomar varios minutos.*
 
-## 📊 Monitoreo y Pruebas
+---
 
-### 📝 Monitoreo de logs del balanceador
+## 🏗️ Monitoreo y Pruebas
+
+### Monitoreo de logs del balanceador
 
 1. Accede a la máquina del balanceador Nginx:
 
@@ -36,7 +62,7 @@ tail -f /var/log/nginx/mysql_access.log
 
 > 💡 *Mantén esta terminal abierta para observar las solicitudes mientras ejecutas las pruebas*
 
-### 🔍 Ejecutando pruebas de rendimiento
+### Ejecutando pruebas de rendimiento
 
 Abre una **nueva terminal** y accede a la máquina cliente:
 
@@ -44,7 +70,7 @@ Abre una **nueva terminal** y accede a la máquina cliente:
 vagrant ssh client
 ```
 
-#### 📥 Pruebas de Escritura
+#### Pruebas de Escritura
 
 Ejecuta el siguiente comando para realizar pruebas de escritura:
 
@@ -63,7 +89,7 @@ sysbench /usr/share/sysbench/oltp_write_only.lua \
 run
 ```
 
-#### 📤 Pruebas de Lectura
+#### Pruebas de Lectura
 
 Ejecuta el siguiente comando para realizar pruebas de lectura:
 
@@ -82,6 +108,8 @@ sysbench /usr/share/sysbench/oltp_read_only.lua \
 run
 ```
 
+---
+
 ## 📈 Análisis de Resultados
 
 Observa los siguientes aspectos en los resultados de las pruebas:
@@ -94,7 +122,9 @@ En los logs del balanceador, podrás observar:
 - Tiempos de respuesta
 - Posibles errores de conexión
 
-## 🛑 Apagado del Sistema
+---
+
+## 🛑 Apagado y Limpieza del Sistema
 
 Cuando hayas terminado las pruebas, puedes apagar las máquinas virtuales:
 
@@ -108,19 +138,12 @@ O eliminarlas completamente:
 vagrant destroy
 ```
 
-## 🔄 Arquitectura del Sistema
-
-<p align="center">
-  <img src="https://i.ibb.co/h1H7rfnM/Screenshot-2025-05-01-134834.png" alt="Imagen de la arquitectura">
-</p>
-
 ---
-
 
 ## 📚 Información Adicional
 
-- Puerto 3307: Configurado para operaciones de lectura (balanceado entre esclavos)
-- Puerto 3308: Configurado para operaciones de escritura (dirigido al maestro)
+- **Puerto 3307**: Configurado para operaciones de lectura (balanceado entre esclavos)
+- **Puerto 3308**: Configurado para operaciones de escritura (dirigido al maestro)
 
 ---
 
